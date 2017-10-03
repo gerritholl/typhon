@@ -8,6 +8,7 @@ from datetime import datetime
 import itertools
 import math
 import warnings
+import scipy.ndimage
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -1010,3 +1011,44 @@ def plot_bitfield(ax, X, Y, bitfield, flag_dict,
     img.set_clim(min(trans.keys())-0.5, max(trans.keys())+0.5)
 
     return (img, cb)
+
+def plot_orbit_on_map_projection(ax, lon, lat, data):
+    """Plot orbit on map
+
+    Plotting an orbit in a map projection is problematic whenever the
+    orbit wraps around the far end of the map projection.  That means
+    ±180° longitude when the central longitude is zero, but the
+    corresponding longitude can be anything depending on what map
+    projection is used.  If you use pcolor/pcolormesh for plotting the
+    orbit, quadrangles will be drawn all the way across the map.  For an
+    illustration, see the series of Stack Overflow questions
+    https://stackoverflow.com/q/46527456/974555,
+    https://stackoverflow.com/q/46547310/974555, and
+    https://stackoverflow.com/q/46548044/974555.
+
+    In normal coordinates, this can be mitigated by plotting both halves
+    seperately, by masking both the coordinates and the data, such as
+    shown in https://stackoverflow.com/a/46547521/974555 .  However, in
+    projected coordinates, I have found that one still gets quadrangles
+    drawn ``across the map''.  To prevent the spurious quadrangles, the neighbours
+    of masked elements need to be masked as well.
+
+    The price for this is that any pcolor quadrangle/pixel that covers the
+    antimeridian, or more generally that causes the wrap-around, is masked
+    and not drawn at all.  I currently do not have a solution for this.
+
+    Parameters:
+        ax (cartopy.mpl.geoaxes.GeoAxesSubplot): Geo-axes to plot the
+            orbit into.
+
+        lon (ndarray): Array with longitude values.
+
+        lat (ndarray): Array with latitude values.
+
+        data (ndarray): Array with values to be passed to
+        pcolor/pcolormesh.
+
+    """
+
+    trans = proj.transform_points(ccrs.Geodetic(), lons, lats)
+    proj = ax.projection
