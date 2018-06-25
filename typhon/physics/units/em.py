@@ -331,7 +331,7 @@ class SRF(FwmuMixin):
 
         df = ureg.Quantity(numpy.diff(f), f.u)
         w1p = w_on_L_grid[1:]
-        L1p = L[:, 1:]
+        L1p = L[..., 1:]
         # ch_BT = (w_on_L_grid * L_f).sum(-1) / (w_on_L_grid.sum())
         # due to numexpr limitation, do sum seperately
         # and due to numexpr bug, explicitly consider zero-dim case
