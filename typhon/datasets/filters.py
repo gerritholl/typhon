@@ -380,7 +380,7 @@ class FirstlineDBFilter(OverlapFilter):
                             return_time=True, satname=satname):
                 try:
                     (cur_line, extra) = self.ds.read(gran,
-                        apply_scale_factors=False, calibrate=False)
+                        apply_scale_factors=False, apply_calibration=False)
                     cur_head = extra["header"]
                     cur_time = self.ds._get_time(cur_line)
                 except (dataset.InvalidFileError,

@@ -117,7 +117,7 @@ class HIRS(dataset.MultiSatelliteDataset, Radiometer, dataset.MultiFileDataset):
         as documented in KLM / POD guides.  This is required when
         calibrate is True.
 
-        calibrate.  If true (defaults true), apply calibration.  When
+        apply_calibration.  If true (defaults true), apply calibration.  When
         false, will not return any brightness temperatures or radiances,
         just counts.  Note that this relates to the native NOAA
         calibration, not to any new calibration such as developed for
