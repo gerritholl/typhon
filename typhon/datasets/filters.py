@@ -340,7 +340,7 @@ class FirstlineDBFilter(OverlapFilter):
         return scanlines[scanlines["hrs_scnlin"] > firstline]    
 
     def update_firstline_db(self, satname=None, start_date=None, end_date=None,
-            overwrite=False):
+            overwrite=False, start_at_beginning=False):
         """Create / update the firstline database
 
         Create or update the database describing for each granule what the
@@ -390,11 +390,14 @@ class FirstlineDBFilter(OverlapFilter):
                 lab = self.ds.get_dataname(cur_head, robust=True)
                 if lab in gfd and not overwrite:
                     logger.debug("Already present: {:s}".format(lab))
-                elif prev_line is not None:
+                elif prev_line is not None or start_at_beginning:
                     # what if prev_line is None?  We don't want to define any
                     # value for the very first granule we process, as we might
                     # be starting to process in the middle...
-                    if cur_time.max() > prev_time.max():
+                    if prev_line is None:
+                        assert start_at_beginning
+                        first = 0
+                    elif cur_time.max() > prev_time.max():
                         # Bugfix 2017-01-16: do not get confused between
                         # the index and the hrs_scnlin field.  So far, I'm using
                         # the index to set firstline but the hrs_scnlin
