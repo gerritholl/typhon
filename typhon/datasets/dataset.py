@@ -22,6 +22,7 @@ import datetime
 import sys
 import collections
 import warnings
+import traceback
 
 import numpy
 import numpy.lib.arraysetops
@@ -460,6 +461,7 @@ class Dataset(metaclass=abc.ABCMeta):
                 if onerror == "skip": # fields that reader relies upon
                     logger.error("Can not read file {}: {}: {}".format(
                         gran, exc, exc.args[0]))
+                    logger.debug("".join(traceback.format_tb(exc.__traceback__)))
                     continue
                 else:
                     raise
