@@ -458,8 +458,8 @@ class Dataset(metaclass=abc.ABCMeta):
 
             except excs as exc:
                 if onerror == "skip": # fields that reader relies upon
-                    logger.error("Can not read file {}: {}".format(
-                        gran, exc.args[0]))
+                    logger.error("Can not read file {}: {}: {}".format(
+                        gran, exc, exc.args[0]))
                     continue
                 else:
                     raise
