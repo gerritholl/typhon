@@ -31,13 +31,6 @@ try:
 except ImportError:
     progressbar = None
  
-try:
-    import coda
-except ImportError:
-    print("Unable to import coda, won't read IASI EPS L1C. "
-        "If you need to read IASI EPS L1C, please obtain CODA from "
-        "http://stcorp.nl/coda/ and install.  Good luck.",
-        file=sys.stderr)
     
 from . import dataset
 from ..utils import safe_eval
@@ -55,6 +48,13 @@ from . import filters
 from . import _tovs_defs
 
 logger = logging.getLogger(__name__)
+
+try:
+    import coda
+except ModuleNotFoundError:
+    logger.warning("Unable to import coda, won't read IASI EPS L1C. "
+        "If you need to read IASI EPS L1C, please obtain CODA from "
+        "http://stcorp.nl/coda/ and install.  Good luck.")
 
 def _noaa_names(i):
     """Return set of possible NOAA names for sat number
