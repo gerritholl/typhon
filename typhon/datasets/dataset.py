@@ -251,19 +251,18 @@ class Dataset(metaclass=abc.ABCMeta):
             **locator_args):
         """Find granule covering instant
 
-        Find granule started most recently before `instant`.
+        Find granule started most recently before ``instant``.
 
         Arguments:
 
             instant (datetime.datetime): Time to search for
                 datetime for which a granule is sought
                 beginning of dataset.
-
-            **locator_args:
-                Any other keyword arguments that the particular dataset
-                needs.  Commonly, `satname` is needed.
+            **locator_args: Any other keyword arguments that the particular
+                dataset needs.  Commonly, ``satname`` is needed.
                  
         Returns:
+
             pathlib.Path object for sought granule.
 
         """
@@ -328,7 +327,7 @@ class Dataset(metaclass=abc.ABCMeta):
                 probably documented in the class docstring.
 
             limits (dict): Limitations to apply to each granule.  For the
-                exact format, see `:func:typhon.math.array.limit_ndarray`.
+                exact format, see :func:`typhon.math.array.limit_ndarray`.
 
             simple_filters (container/iterable): collection of functions to be
                 applied for filtering.  Must take ndarray input, must give
@@ -785,7 +784,7 @@ class Dataset(metaclass=abc.ABCMeta):
         
             my_data (ndarray): Data for self.
                 A (masked) array with a dtype such as returned from
-                `self.read <Dataset.read>`.
+                :meth:`Dataset.read`.
 
             other_obj (Dataset): Dataset to match
                 Object from a Dataset subclass from which to find matching
@@ -799,14 +798,15 @@ class Dataset(metaclass=abc.ABCMeta):
                 other_obj.read_period.  May need to contain things like
                 {"locator_args": {"satname": "noaa18"}}
 
-            trans (collections.OrderedDict): Dictionary of what field in `my_data`
-                corresponds to what field in `other_data`.  Optional; by
+            trans (collections.OrderedDict): Dictionary of what field in
+                ``my_data``
+                corresponds to what field in ``other_data``.  Optional; by
                 default, merges self.unique_fields and
                 other_obj.unique_fields, and assumes names between the two
                 are identical.  Order is relevant for optimal recursive
                 bisection search for matches, which is to be implemented.
     
-            timetol (timedelta64): For datetime types, `isclose` does not
+            timetol (timedelta64): For datetime types, :func:`numpy.isclose` does not
                 work (https://github.com/numpy/numpy/issues/5610).  User
                 must pass an explicit tolerance, defaulting to 1 second.
 
@@ -816,10 +816,8 @@ class Dataset(metaclass=abc.ABCMeta):
 
         Returns:
 
-            Masked ndarray of same size as `my_data` and same `dtype` as
-            returned by `other_obj.read`.
-
-        TODO: Allow user to pass already-read data from other dataset.
+            Masked ndarray of same size as ``my_data`` and same ``dtype`` as
+            returned by ``other_obj.read``.
         """
 
         if trans is None:
@@ -980,7 +978,7 @@ class Dataset(metaclass=abc.ABCMeta):
 
             M (ndarray): ndarray with existing data
                 A (masked) array with a dtype such as returned from
-                `self.read <Dataset.read>`.
+                :meth:`Dataset.read`.
 
             fld (str): Additional field to read from original data
 
@@ -1046,8 +1044,8 @@ class MultiFileDataset(Dataset):
         subdir (pathlib.Path or str):
             Describes the directory within basedir where granules are
             located.  May contain string formatting directives where
-            particular fields are replaces, such as `year`, `month`, and
-            `day`.  For example: `subdir = '{year}/{month}'`.  Sorting
+            particular fields are replaces, such as ``year``, ``month``, and
+            ``day``.  For example: ``subdir = '{year}/{month}'``.  Sorting
             cannot be more narrow than by day.
 
         re (str):
@@ -1130,7 +1128,7 @@ class MultiFileDataset(Dataset):
         Arguments:
             
             dt (datetime.datetime): Timestamp for inquiry.
-                In reality, any object with `year`, `month`, and `day`
+                In reality, any object with ``year``, ``month``, and ``day``
                 attributes works.
 
         Returns:
@@ -1221,7 +1219,7 @@ class MultiFileDataset(Dataset):
         Yields a 2-element tuple where the first contains information on
         year(/month/day), and the second is the path.
 
-        Arguments:
+        Args:
 
             d_start (datetime.date): Starting date.
             d_end (datetime.date): Ending date
@@ -1232,7 +1230,8 @@ class MultiFileDataset(Dataset):
         Yields:
 
             pathlib.Path objects for each directory in the dataset
-            containing files between `d_start` and `d_end`.
+            containing files between ``d_start`` and ``d_end``.
+
         """
 
         self.verify_mandatory_fields(extra)
@@ -1287,10 +1286,10 @@ class MultiFileDataset(Dataset):
         dataset.  Could be something like a satellite name in the case of
         sensors occurring on multiple platforms, like HIRS.  To see what
         keyword arguments are accepted or possibly needed for a particular
-        dataset, call self.get_path_format_variables()
+        dataset, call ``self.get_path_format_variables()``.
 
-        If keyword argument `return_time` is present and True, yield
-        tuples of (start_time, path) rather than just `path`.
+        If keyword argument ``return_time`` is present and True, yield
+        tuples of ``(start_time, path)`` rather than just ``path``.
 
         The results are usually sorted by start time, but this is not
         guaranteed and depends on the filesystem.  If you need sorted
@@ -1309,7 +1308,8 @@ class MultiFileDataset(Dataset):
         Yields:
 
             pathlib.Path objects for each datafile in the dataset between
-            `dt_start` and `dt_end`.
+            ``dt_start`` and ``dt_end``.
+
         """
 
         if dt_start is None:
@@ -1493,12 +1493,12 @@ class MultiFileDataset(Dataset):
         return m.groupdict()
 
     def get_times_for_granule(self, p, **kwargs):
-        """For granule stored in `path`, get start and end times.
+        """For granule stored in ``path``, get start and end times.
 
         May take hints for year, month, day, hour, minute, second, and
         their endings, according to self.datefields
 
-        Arguments:
+        Args:
 
             p (pathlib.Path): path to granule
             **kwargs: Any more info that may be needed
