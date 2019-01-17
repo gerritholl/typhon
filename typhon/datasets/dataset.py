@@ -667,21 +667,10 @@ class Dataset(metaclass=abc.ABCMeta):
                 ndarray (at the top level).  The values are functions.
                 Each function must take four arguments:
                     
-                    content [ndarray or xarray.DataArray]
-
-                        Content of file.
-
-                    D [Mapping]
-
-                        Output of earlier-executed data-fields.
-
-                    header [ndarray or xarry.DataArray]
-
-                        Header of file.
-
-                    fn [string-like]
-
-                        Name of file.
+                - content [ndarray or xarray.DataArray], content of file.
+                - D [Mapping], Output of earlier-executed data-fields.
+                - header [ndarray or xarry.DataArray], Header of file.
+                - fn [string-like], Name of file.
 
                 and return an ndarray or xarray.DataArray to be merged
                 with content.  Dictionary are ordered now, make sure to
